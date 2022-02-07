@@ -12,15 +12,24 @@ router.post("/register", (req, res) => {
 });
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  console.log(req);
   res.send(req.user);
 });
 
+router.get("/secret", (req, res) => {
+  req.user ? res.send("cake.jpg") : res.sendStatus(401);
+});
+// router.post("/logout", (req, res) => {
+//   req.logout();
+//   res.redirect("/"); // El redirect, es tarea del front, estamos en back ahora. Se puede evitar el redireccionamiento.
+// });
 router.post("/logout", (req, res) => {
-  req.logout();
-  res.redirect('/');
+  req.logOut();
+  res.sendStatus(200);
 });
 
+router.get("/me", (req, res) => {
+  !req.user ? res.sendStatus(401) : res.send(req.user);
+});
 
 // Don´t modify this route, keep it at the bottom.
 router.use("/", function (req, res) {
